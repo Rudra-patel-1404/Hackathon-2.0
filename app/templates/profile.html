@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - Resource Hub{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Profile Header -->
+    <div class="row mb-4">
+        <div class="col-md-8 offset-md-2">
+            <div class="card bg-dark text-light border-0">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar-circle me-4">
+                            <i class="fas fa-user-circle fa-4x text-primary"></i>
+                        </div>
+                        <div>
+                            <h2 class="mb-1">{{ current_user.username }}</h2>
+                            <p class="text-muted mb-0">{{ current_user.email }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <h4 class="mb-1">{{ resources|length }}</h4>
+                                <p class="text-muted mb-0">Resources</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <h4 class="mb-1">{{ resources|sum(attribute='downloads') }}</h4>
+                                <p class="text-muted mb-0">Total Downloads</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <h4 class="mb-1">{{ current_user.created_at.strftime('%Y-%m-%d') }}</h4>
+                                <p class="text-muted mb-0">Member Since</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-end mt-3">
+                        <a href="#" class="btn btn-outline-primary">
+                            <i class="fas fa-edit me-2"></i>Edit Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- My Resources -->
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-4">My Resources</h3>
+            
+            {% for resource in resources %}
+            <div class="card bg-dark text-light border-0 mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 class="card-title">{{ resource.title }}</h5>
+                            <p class="card-text text-muted">{{ resource.description }}</p>
+                            
+                            <div class="mb-3">
+                                <span class="badge bg-primary me-2">{{ resource.subject }}</span>
+                                {% for tag in resource.tags %}
+                                <span class="badge bg-secondary me-2">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                            
+                            <small class="text-muted">
+                                <i class="fas fa-download me-1"></i>{{ resource.downloads }} downloads
+                            </small>
+                        </div>
+                        <div>
+                            <a href="{{ url_for('resources.view_resource', resource_id=resource._id) }}" 
+                               class="btn btn-sm btn-outline-primary me-2">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="#" class="btn btn-sm btn-outline-secondary me-2">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a href="#" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="card bg-dark text-light border-0">
+                <div class="card-body text-center py-5">
+                    <h5 class="card-title">No Resources Yet</h5>
+                    <p class="card-text text-muted">Start sharing your knowledge by uploading resources.</p>
+                    <a href="{{ url_for('resources.upload') }}" class="btn btn-primary">
+                        <i class="fas fa-upload me-2"></i>Upload Resource
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(0, 242, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+{% endblock %} 

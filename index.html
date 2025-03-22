@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Hub - Future of Learning</title>
+    <!-- Existing CSS links -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #00f2ff;
+            --secondary-color: #6c63ff;
+            --dark-color: #0a192f;
+            --light-color: #e6f1ff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+            color: var(--light-color);
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+
+        /* Enhanced Hero Section */
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glowText 3s ease-in-out infinite;
+        }
+
+        /* Interactive Cards */
+        .subject-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        .subject-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(0, 242, 255, 0.1),
+                rgba(108, 99, 255, 0.1),
+                transparent
+            );
+            transform-origin: center;
+            animation: rotateGlow 3s linear infinite;
+            pointer-events: none;
+        }
+
+        /* Custom Cursor */
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
+            mix-blend-mode: screen;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            opacity: 0;
+            background: var(--primary-color);
+            mix-blend-mode: screen;
+        }
+
+        /* Floating Animation */
+        .float {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        /* Particle Effect */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            border-radius: 50%;
+            background: var(--primary-color);
+        }
+
+        /* Animations */
+        @keyframes glowText {
+            0%, 100% { text-shadow: 0 0 20px rgba(0, 242, 255, 0.5); }
+            50% { text-shadow: 0 0 40px rgba(0, 242, 255, 0.8); }
+        }
+
+        @keyframes rotateGlow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Interactive Background */
+        .interactive-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .subject-card {
+                margin-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+    
+    <!-- Interactive Background Canvas -->
+    <canvas class="interactive-bg"></canvas>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <!-- Your existing navbar code -->
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8 hero-content">
+                    <h1 class="hero-title float">Future of Learning</h1>
+                    <p class="lead mb-4">Experience the next generation of educational resources. Join our community of innovators and shape the future of learning.</p>
+                    <div class="d-flex gap-3">
+                        <a href="html_pages/register.html" class="btn btn-primary float">
+                            <i class="fas fa-rocket me-2"></i>Launch Now
+                        </a>
+                        <a href="html_pages/login.html" class="btn btn-outline-light float">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Subjects -->
+    <div class="container mb-5">
+        <h2 class="section-title text-center">Popular Subjects</h2>
+        <div class="row g-4">
+            <!-- Subject cards will be dynamically added here -->
+        </div>
+    </div>
+
+    <!-- Add this JavaScript before closing body tag -->
+    <script>
+        // Custom cursor and trails
+        const cursor = document.querySelector('.custom-cursor');
+        const trails = Array.from({ length: 20 }, () => {
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            document.body.appendChild(trail);
+            return trail;
+        });
+
+        let mouseX = 0;
+        let mouseY = 0;
+        let cursorX = 0;
+        let cursorY = 0;
+        let trailPositions = trails.map(() => ({ x: 0, y: 0 }));
+
+        // Mouse movement handler
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            // Create particles
+            createParticle(mouseX, mouseY);
+        });
+
+        // Particle effect
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.width = Math.random() * 8 + 'px';
+            particle.style.height = particle.style.width;
+            document.body.appendChild(particle);
+
+            gsap.to(particle, {
+                duration: Math.random() * 1 + 0.5,
+                x: (Math.random() - 0.5) * 100,
+                y: (Math.random() - 0.5) * 100,
+                opacity: 1,
+                ease: "power4.out",
+                onComplete: () => particle.remove()
+            });
+        }
+
+        // Animate cursor and trails
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.1;
+            cursorY += (mouseY - cursorY) * 0.1;
+            cursor.style.left = `${cursorX}px`;
+            cursor.style.top = `${cursorY}px`;
+
+            trailPositions.forEach((pos, index) => {
+                const prevPos = index === 0 ? { x: cursorX, y: cursorY } : trailPositions[index - 1];
+                pos.x += (prevPos.x - pos.x) * 0.3;
+                pos.y += (prevPos.y - pos.y) * 0.3;
+                
+                trails[index].style.left = `${pos.x}px`;
+                trails[index].style.top = `${pos.y}px`;
+                trails[index].style.opacity = 1 - (index / trails.length);
+            });
+
+            requestAnimationFrame(animateCursor);
+        }
+
+        animateCursor();
+
+        // Interactive background
+        const canvas = document.querySelector('.interactive-bg');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // Create interactive background
+        const particles = [];
+        const particleCount = 100;
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                this.radius = Math.random() * 2;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 242, 255, 0.5)';
+                ctx.fill();
+            }
+        }
+
+        // Initialize particles
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        // Animation loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            // Draw connections
+            particles.forEach((particle, i) => {
+                particles.slice(i + 1).forEach(other => {
+                    const dx = particle.x - other.x;
+                    const dy = particle.y - other.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 100) {
+                        ctx.beginPath();
+                        ctx.moveTo(particle.x, particle.y);
+                        ctx.lineTo(other.x, other.y);
+                        ctx.strokeStyle = `rgba(0, 242, 255, ${1 - distance / 100})`;
+                        ctx.stroke();
+                    }
+                });
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Dynamic subject cards
+        const subjects = [
+            {
+                title: 'AI & Robotics',
+                icon: 'fa-microchip',
+                description: 'Explore the future of artificial intelligence and robotics'
+            },
+            {
+                title: 'Quantum Computing',
+                icon: 'fa-atom',
+                description: 'Dive into the world of quantum computing'
+            },
+            {
+                title: 'Neural Networks',
+                icon: 'fa-brain',
+                description: 'Learn about deep learning and neural networks'
+            }
+        ];
+
+        const subjectsContainer = document.querySelector('.row.g-4');
+        subjects.forEach(subject => {
+            const card = document.createElement('div');
+            card.className = 'col-md-4';
+            card.innerHTML = `
+                <div class="subject-card float">
+                    <i class="fas ${subject.icon} subject-icon fa-3x mb-3"></i>
+                    <h3>${subject.title}</h3>
+                    <p>${subject.description}</p>
+                    <a href="html_pages/explore.html" class="btn btn-outline-light">Explore</a>
+                </div>
+            `;
+            subjectsContainer.appendChild(card);
+        });
+    </script>
+</body>
+</html> 

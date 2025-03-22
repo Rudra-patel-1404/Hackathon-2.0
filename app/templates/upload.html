@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Resource - Resource Hub{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card bg-dark text-light border-0">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4">Upload Resource</h2>
+                    
+                    <form method="POST" action="{{ url_for('resources.upload') }}" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Resource Title</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" 
+                                   id="title" name="title" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <textarea class="form-control bg-dark text-light border-secondary" 
+                                      id="description" name="description" rows="4" required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Subject</label>
+                            <select class="form-select bg-dark text-light border-secondary" 
+                                    id="subject" name="subject" required>
+                                <option value="">Select a subject</option>
+                                {% for subject in subjects %}
+                                <option value="{{ subject.name }}">{{ subject.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="tags" class="form-label">Tags (comma-separated)</label>
+                            <input type="text" class="form-control bg-dark text-light border-secondary" 
+                                   id="tags" name="tags" placeholder="e.g., python, machine learning, data science">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="file" class="form-label">Resource File</label>
+                            <input type="file" class="form-control bg-dark text-light border-secondary" 
+                                   id="file" name="file" required>
+                            <div class="form-text text-light">
+                                Supported formats: PDF, DOC, DOCX, PPT, PPTX, ZIP, RAR
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-upload me-2"></i>Upload Resource
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

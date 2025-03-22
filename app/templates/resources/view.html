@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title mb-0">{{ resource.title }}</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <h5>Description</h5>
+                    <p>{{ resource.description }}</p>
+                </div>
+                
+                <div class="mb-3">
+                    <h5>Details</h5>
+                    <ul class="list-unstyled">
+                        <li><strong>Subject:</strong> {{ resource.subject.name }}</li>
+                        <li><strong>Author:</strong> {{ resource.author.username }}</li>
+                        <li><strong>Uploaded:</strong> {{ resource.created_at.strftime('%Y-%m-%d') }}</li>
+                        <li><strong>File Type:</strong> {{ resource.file_type.upper() }}</li>
+                        <li><strong>Views:</strong> {{ resource.views }}</li>
+                        <li><strong>Downloads:</strong> {{ resource.downloads }}</li>
+                    </ul>
+                </div>
+
+                {% if resource.is_verified %}
+                    <div class="alert alert-success">
+                        <i class="bi bi-check-circle"></i> Verified by {{ resource.verified_by.username }}
+                    </div>
+                {% else %}
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i> This resource is pending verification
+                    </div>
+                {% endif %}
+
+                {% if current_user.is_authenticated %}
+                    <div class="d-grid gap-2">
+                        {% if resource.is_verified or resource.author_id == current_user.id %}
+                            <a href="{{ url_for('resources.download_resource', resource_id=resource.id) }}" 
+                               class="btn btn-primary">
+                                <i class="bi bi-download"></i> Download
+                            </a>
+                        {% endif %}
+                        
+                        {% if current_user.is_mentor and not resource.is_verified %}
+                            <form method="POST" action="{{ url_for('resources.verify_resource', resource_id=resource.id) }}">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-check-circle"></i> Verify Resource
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        Please <a href="{{ url_for('auth.login') }}">login</a> to download this resource.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Related Resources</h5>
+            </div>
+            <div class="card-body">
+                {% set related = resource.subject.resources[:5] %}
+                {% if related %}
+                    <div class="list-group">
+                        {% for r in related %}
+                            {% if r.id != resource.id and r.is_verified %}
+                                <a href="{{ url_for('resources.view_resource', resource_id=r.id) }}" 
+                                   class="list-group-item list-group-item-action">
+                                    {{ r.title }}
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted">No related resources found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

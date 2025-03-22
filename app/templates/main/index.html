@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+
+{% block title %}Resource Hub - Student Resource Sharing Platform{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center py-5">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold text-dark mb-4">Welcome to Resource Hub</h1>
+                <p class="lead text-muted mb-4">Access and share educational resources with your peers. Join our community of learners and contribute to knowledge sharing.</p>
+                {% if not current_user.is_authenticated %}
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Get Started
+                    </a>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg">
+                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-6 d-none d-lg-block">
+                <img src="{{ url_for('static', filename='images/hero-image.svg') }}" alt="Resource Hub" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="features-section py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-book-reader"></i>
+                    </div>
+                    <h3 class="h5 mb-3">Access Resources</h3>
+                    <p class="text-muted mb-0">Browse through a vast collection of educational materials shared by students and educators.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <h3 class="h5 mb-3">Share Knowledge</h3>
+                    <p class="text-muted mb-0">Contribute to the community by sharing your study materials and helping others learn.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="h5 mb-3">Connect</h3>
+                    <p class="text-muted mb-0">Connect with peers, discuss topics, and collaborate on learning projects.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Subjects Section -->
+<div class="subjects-section py-5 bg-light">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="section-title">Popular Subjects</h2>
+                <p class="text-muted">Explore resources by subject area</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            {% for subject in subjects %}
+            <div class="col-md-4">
+                <div class="subject-card">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-book-open me-2"></i>{{ subject.name }}
+                            </h5>
+                            <p class="card-text text-muted">{{ subject.description }}</p>
+                            <a href="{{ url_for('resources.subject', subject_id=subject._id) }}" class="btn btn-outline-primary">
+                                Browse Resources
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Recent Resources -->
+<div class="resources-section py-5">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="section-title">Recent Resources</h2>
+                <p class="text-muted">Latest educational materials shared by our community</p>
+            </div>
+        </div>
+        <div class="row g-4">
+            {% for resource in recent_resources %}
+            <div class="col-md-6">
+                <div class="resource-card">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ resource.title }}</h5>
+                            <p class="card-text text-muted">{{ resource.description[:150] }}...</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-user me-1"></i>{{ resource.author.username }}
+                                </small>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>{{ resource.created_at.strftime('%Y-%m-%d') }}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{{ url_for('resources.view', resource_id=resource._id) }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-eye me-1"></i>View Resource
+                            </a>
+                            {% if resource.file_url %}
+                            <a href="{{ url_for('resources.download', resource_id=resource._id) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-download me-1"></i>Download
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="cta-section py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="mb-4">Ready to Get Started?</h2>
+        <p class="lead mb-4">Join our community of learners and start sharing knowledge today.</p>
+        {% if not current_user.is_authenticated %}
+        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg">
+            <i class="fas fa-user-plus me-2"></i>Create Account
+        </a>
+        {% else %}
+        <a href="{{ url_for('resources.upload') }}" class="btn btn-light btn-lg">
+            <i class="fas fa-upload me-2"></i>Share Resources
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+/* General Styles */
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: #2c3e50;
+}
+
+/* Hero Section */
+.hero-section {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e9ecef;
+    padding: 4rem 0;
+}
+
+/* Features Section */
+.feature-card {
+    text-align: center;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.icon-wrapper {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.5rem;
+    background: #f8f9fa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-wrapper i {
+    font-size: 1.5rem;
+    color: #3498db;
+}
+
+/* Subjects Section */
+.section-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.subject-card .card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.subject-card .card:hover {
+    transform: translateY(-5px);
+}
+
+/* Resources Section */
+.resource-card .card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.resource-card .card:hover {
+    transform: translateY(-5px);
+}
+
+.card-footer {
+    border-top: 1px solid #e9ecef;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    border-color: #2980b9;
+}
+
+.btn-outline-primary {
+    color: #3498db;
+    border-color: #3498db;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+
+/* CTA Section */
+.cta-section {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 3rem 0;
+    }
+    
+    .feature-card {
+        margin-bottom: 1rem;
+    }
+}
+</style>
+{% endblock %} 

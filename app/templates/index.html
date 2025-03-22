@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Resource Hub - Share and Discover Learning Resources{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Share and Discover Learning Resources</h1>
+                <p class="lead mb-4">Join our community of learners and educators. Share your knowledge, discover new resources, and enhance your learning journey.</p>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('resources.upload') }}" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-upload me-2"></i>Upload Resource
+                </a>
+                <a href="{{ url_for('main.explore') }}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-search me-2"></i>Explore Resources
+                </a>
+                {% else %}
+                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-user-plus me-2"></i>Get Started
+                </a>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <img src="https://via.placeholder.com/600x400" alt="Hero Image" class="img-fluid rounded-3">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Featured Subjects -->
+<div class="container py-5">
+    <h2 class="text-center mb-5">Featured Subjects</h2>
+    <div class="row g-4">
+        {% for subject in subjects %}
+        <div class="col-md-4">
+            <div class="card bg-dark text-light border-0 h-100">
+                <div class="card-body text-center">
+                    <i class="fas fa-book fa-3x text-primary mb-3"></i>
+                    <h5 class="card-title">{{ subject.name }}</h5>
+                    <p class="card-text text-muted">{{ subject.description }}</p>
+                    <a href="{{ url_for('main.explore', subject=subject.name) }}" class="btn btn-outline-primary">
+                        Explore Resources
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Recent Resources -->
+<div class="container py-5">
+    <h2 class="text-center mb-5">Recent Resources</h2>
+    <div class="row g-4">
+        {% for resource in featured_resources %}
+        <div class="col-md-4">
+            <div class="card bg-dark text-light border-0 h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ resource.title }}</h5>
+                    <p class="card-text text-muted">{{ resource.description[:150] }}...</p>
+                    
+                    <div class="mb-3">
+                        <span class="badge bg-primary me-2">{{ resource.subject }}</span>
+                        {% for tag in resource.tags[:3] %}
+                        <span class="badge bg-secondary me-2">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="fas fa-download me-1"></i>{{ resource.downloads }}
+                        </small>
+                        <div>
+                            <a href="{{ url_for('resources.view_resource', resource_id=resource._id) }}" 
+                               class="btn btn-sm btn-outline-primary me-2">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ url_for('resources.download_resource', resource_id=resource._id) }}" 
+                               class="btn btn-sm btn-primary">
+                                <i class="fas fa-download"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="container-fluid py-5 bg-dark">
+    <div class="container text-center">
+        <h2 class="mb-4">Ready to Share Your Knowledge?</h2>
+        <p class="lead mb-4">Join our community and start sharing your learning resources today.</p>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('resources.upload') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-upload me-2"></i>Upload Resource
+        </a>
+        {% else %}
+        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">
+            <i class="fas fa-user-plus me-2"></i>Create Account
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

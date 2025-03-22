@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI & Robotics - Resource Hub</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Copy the same styles from explore.html */
+        /* Add additional styles for subject page */
+        .subject-header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .subject-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .topic-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 242, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="../../index.html">
+                <i class="fas fa-rocket me-2"></i>Resource Hub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="../explore.html">Explore</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../upload.html">Upload</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../login.html">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../register.html">Register</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container explore-container">
+        <!-- Subject Header -->
+        <div class="subject-header">
+            <i class="fas fa-microchip subject-icon"></i>
+            <h1 class="section-title mb-3">AI & Robotics</h1>
+            <p class="lead">Explore the fascinating world of artificial intelligence and robotics</p>
+        </div>
+
+        <!-- Topics Section -->
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="topic-card">
+                    <h4 class="glow">Introduction to AI</h4>
+                    <p>Basic concepts and foundations of artificial intelligence</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check me-2"></i>AI History</li>
+                        <li><i class="fas fa-check me-2"></i>Types of AI</li>
+                        <li><i class="fas fa-check me-2"></i>Applications</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="topic-card">
+                    <h4 class="glow">Robotics Fundamentals</h4>
+                    <p>Core concepts of robotics and automation</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check me-2"></i>Robot Types</li>
+                        <li><i class="fas fa-check me-2"></i>Control Systems</li>
+                        <li><i class="fas fa-check me-2"></i>Sensors & Actuators</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="topic-card">
+                    <h4 class="glow">AI in Robotics</h4>
+                    <p>Integration of AI with robotic systems</p>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-check me-2"></i>Computer Vision</li>
+                        <li><i class="fas fa-check me-2"></i>Path Planning</li>
+                        <li><i class="fas fa-check me-2"></i>Decision Making</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Section -->
+        <h3 class="section-title mt-5">Popular Resources</h3>
+        <div class="row">
+            <!-- Resource cards similar to explore.html -->
+            <div class="col-md-6">
+                <div class="resource-card">
+                    <h4 class="glow">Introduction to Robotics</h4>
+                    <p>A comprehensive guide to robotics fundamentals...</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="fas fa-user-astronaut me-1"></i>Robot Master
+                        </small>
+                        <small class="text-muted">
+                            <i class="fas fa-download me-1"></i>234 downloads
+                        </small>
+                    </div>
+                    <div class="mt-3">
+                        <a href="#" class="btn btn-sm btn-primary">
+                            <i class="fas fa-eye me-1"></i>View
+                        </a>
+                        <a href="#" class="btn btn-sm btn-outline-light">
+                            <i class="fas fa-download me-1"></i>Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

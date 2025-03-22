@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Profile Information -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow">
+            <div class="card-body text-center">
+                <i class="fas fa-user-circle fa-5x text-primary mb-3"></i>
+                <h3 class="card-title">{{ user.username }}</h3>
+                <p class="text-muted">{{ user.email }}</p>
+                <div class="d-flex justify-content-center gap-2 mb-3">
+                    {% if user.is_mentor %}
+                    <span class="badge bg-success">
+                        <i class="fas fa-check-circle me-1"></i>Mentor
+                    </span>
+                    {% endif %}
+                    {% if user.is_verified %}
+                    <span class="badge bg-primary">
+                        <i class="fas fa-shield-alt me-1"></i>Verified
+                    </span>
+                    {% endif %}
+                </div>
+                <p class="text-muted">
+                    <small>
+                        <i class="fas fa-calendar me-1"></i>Member since {{ user.created_at.strftime('%Y-%m-%d') }}
+                    </small>
+                </p>
+                <p class="text-muted">
+                    <small>
+                        <i class="fas fa-clock me-1"></i>Last login: {{ user.last_login.strftime('%Y-%m-%d %H:%M') }}
+                    </small>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- User's Resources -->
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-book me-2"></i>My Resources
+                </h4>
+            </div>
+            <div class="card-body">
+                {% if resources %}
+                <div class="row g-4">
+                    {% for resource in resources %}
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ resource.title }}</h5>
+                                <p class="card-text">{{ resource.description[:150] }}...</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>{{ resource.created_at.strftime('%Y-%m-%d') }}
+                                    </small>
+                                    <div class="btn-group">
+                                        <a href="{{ url_for('resources.view', resource_id=resource._id) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ url_for('resources.edit', resource_id=resource._id) }}" class="btn btn-sm btn-outline-secondary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ resource._id }}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                    <p class="lead text-muted">You haven't uploaded any resources yet.</p>
+                    <a href="{{ url_for('resources.upload') }}" class="btn btn-primary">
+                        <i class="fas fa-upload me-2"></i>Upload Your First Resource
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Resource Modals -->
+{% for resource in resources %}
+<div class="modal fade" id="deleteModal{{ resource._id }}" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete Resource</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete "{{ resource.title }}"? This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form action="{{ url_for('resources.delete', resource_id=resource._id) }}" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock %} 

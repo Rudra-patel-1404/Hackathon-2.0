@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Resources - Resource Hub{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Sidebar with Subjects -->
+        <div class="col-lg-3 mb-4">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Subjects</h5>
+                </div>
+                <div class="list-group list-group-flush">
+                    <a href="{{ url_for('resources.browse') }}" class="list-group-item list-group-item-action {% if not request.args.get('subject') %}active{% endif %}">
+                        All Subjects
+                    </a>
+                    {% for subject in subjects %}
+                    <a href="{{ url_for('resources.browse', subject=subject._id) }}" 
+                       class="list-group-item list-group-item-action {% if request.args.get('subject') == subject._id|string %}active{% endif %}">
+                        {{ subject.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="mb-0">Browse Resources</h2>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('resources.upload') }}" class="btn btn-primary">
+                    <i class="fas fa-upload me-2"></i>Upload Resource
+                </a>
+                {% endif %}
+            </div>
+
+            <!-- Search Bar -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form action="{{ url_for('resources.browse') }}" method="GET" class="row g-3">
+                        <div class="col-md-8">
+                            <input type="text" name="q" class="form-control" placeholder="Search resources..." value="{{ request.args.get('q', '') }}">
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="fas fa-search me-2"></i>Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Resources Grid -->
+            <div class="row g-4">
+                {% for resource in resources.items %}
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ resource.title }}</h5>
+                            <p class="card-text text-muted">{{ resource.description[:150] }}...</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    <i class="fas fa-user me-1"></i>{{ resource.author.username }}
+                                </small>
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar me-1"></i>{{ resource.created_at.strftime('%Y-%m-%d') }}
+                                </small>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <a href="{{ url_for('resources.view_resource', resource_id=resource._id) }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-eye me-1"></i>View Resource
+                            </a>
+                            {% if resource.file_url %}
+                            <a href="{{ url_for('resources.download_resource', resource_id=resource._id) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-download me-1"></i>Download
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        No resources found. Try different search terms or browse all resources.
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if resources.pages > 1 %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% for page in resources.iter_pages() %}
+                        {% if page %}
+                            <li class="page-item {% if page == resources.page %}active{% endif %}">
+                                <a class="page-link" href="{{ url_for('resources.browse', page=page, **request.args) }}">{{ page }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <span class="page-link">...</span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.list-group-item {
+    border: none;
+    padding: 0.75rem 1rem;
+}
+
+.list-group-item.active {
+    background-color: #f8f9fa;
+    color: #3498db;
+    border-left: 3px solid #3498db;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem 1rem;
+}
+
+.form-control:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+}
+
+.pagination .page-link {
+    border: none;
+    color: #3498db;
+    padding: 0.5rem 1rem;
+    margin: 0 0.25rem;
+    border-radius: 4px;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #3498db;
+    color: white;
+}
+</style>
+{% endblock %} 
